@@ -23,4 +23,25 @@ class DependencyInjectionTest extends TestCase
 
     self::assertEquals("foo and bar", $bar->bar());
    }
+
+   public function testDependencyInjection2()
+   {
+    // membuat object Foo sebagai singleton (hanya dibuat sekali)
+    $this->app->singleton(Foo::class, function($app){
+        return new Foo();
+    });
+    $this->app->singleton(Bar::class, function($app){
+        return new Bar($app->make(Foo::class));
+    });
+
+    // jika membuat object dengan $this->app->make, maka dependency yg dibutuhkan akan diisi otomatis oleh container laravel
+    $bar = $this->app->make(Bar::class);
+
+    $foo = $this->app->make(Foo::class);
+    $bar1 = $this->app->make(Bar::class);
+    $bar2 = $this->app->make(Bar::class);
+
+    self::assertSame($foo, $bar1->foo);
+    self::assertSame($bar1, $bar2);
+   }
 }
