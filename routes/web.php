@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\HelloController;
+use App\Http\Controllers\InputController;
 use Illuminate\Support\Facades\Route;
 
 // Logic untuk Route sebaiknya disimpan dalam controller
@@ -24,7 +25,6 @@ Route::view('/hello', 'hello', ['name' => "Dira"]);
 Route::get('/hello-again', function () {
     return view('hello', ['name' => 'Dira']);
 });
-
 Route::get("/hello-home", function () {
     return view('home.hello', ['name' => "Dira"]);
 });
@@ -47,6 +47,7 @@ Route::get("/users/{id?}", function(string $userId = '404') {
     return "Users : " . $userId;
 })->name("user.detail");
 
+
 // Named Route --> dengan menggunakan ->name(), memberikan nama pada sebuah route, untuk mendapatkan informasi seperti url, atau untuk redirect
 Route::get('/pengguna/{id}', function($id) {
     // mengambil url dari user detail
@@ -55,7 +56,6 @@ Route::get('/pengguna/{id}', function($id) {
     ]);
     return "Link : " . $link;
 });
-
 Route::get('/pengguna-redirect/{id}', function($id) {
     return redirect()->route('user.detail', [
         'id' => $id
@@ -64,4 +64,13 @@ Route::get('/pengguna-redirect/{id}', function($id) {
 
 
 // Menggunakan Controller --> daftarkan controller di closure Route, dengan mengganti closure berupa array yang berisi class controller dan nama function nya
-Route::get('controller/hello/{name}', [HelloController::class, 'hello']);
+Route::get('/controller/hello/{name}', [HelloController::class, 'hello']);
+Route::get("/controller/request", [HelloController::class, 'request']);
+
+
+// Menggunakan InputController --> menerima input dari request
+Route::get('/input/hello', [InputController::class, "hello"]);
+Route::post('/input/hello', [InputController::class, "hello"]);
+Route::post('/input/hello/first', [InputController::class, "helloFirst"]);
+Route::post('/input/hello/all-input', [InputController::class, "helloAllInput"]);
+Route::post('/input/hello/array-input', [InputController::class, "helloArrayInput"]);

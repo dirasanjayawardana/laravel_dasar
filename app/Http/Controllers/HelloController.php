@@ -18,8 +18,21 @@ class HelloController extends Controller
         $this->helloService = $helloService;
     }
 
-    public function hello($name): string
+    // Request --> untuk mengambil informasi http request, secara otomatis akan di inject oleh service container
+    public function hello(Request $request, $name): string
     {
         return $this->helloService->hello($name);
+    }
+
+    // Request --> untuk mengambil informasi http request, secara otomatis akan di inject oleh service container
+    public function request(Request $request)
+    {
+        return $request->path() . PHP_EOL . // mengambil path atau endpoint nya
+            $request->url() . PHP_EOL . // mengambil url tanpa path parameter
+            $request->fullUrl() . PHP_EOL . // mengambil url utuh beserta pathnya
+            $request->method() . PHP_EOL . // mngambil methodnya apa
+            $request->isMethod("GET") . PHP_EOL . // mengecek apakah methodnya post
+            $request->header("keyHeader", "default value jika tidak ketemu") . PHP_EOL . // mengambil data header dengan keynya
+            $request->bearerToken(); // mengambil token bearernya di header authorization
     }
 }
