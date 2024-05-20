@@ -13,6 +13,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// untuk melihat semua routing di laravel --> php artisan route:list
+
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/dira', function () {
+    return "Hello dira sanjaya wardana";
+});
+
+Route::redirect('/home', '/dira');
+
+// fallback route --> ketika halaman yang diakses tidak ada
+Route::fallback(function () {
+    return "Page Not Found";
 });

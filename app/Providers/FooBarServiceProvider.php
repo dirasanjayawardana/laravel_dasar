@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Services\HelloService;
 use App\Services\HelloServiceImpl;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\ServiceProvider;
 
 // Binding, Singleton/Instance, best practicenya dibuat di ServiceProvider
