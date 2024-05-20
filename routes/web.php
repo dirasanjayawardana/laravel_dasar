@@ -5,27 +5,13 @@ use App\Http\Controllers\InputController;
 use Illuminate\Support\Facades\Route;
 
 // Logic untuk Route sebaiknya disimpan dalam controller
-
 // jika ada Route yang konflik ada ada route yang sama, maka tidak akan terjadi error, tetapi laravel akan mengeksekusi route yang paling atas
-
 // untuk melihat semua routing di laravel --> php artisan route:list
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-<<<<<<< HEAD
-Route::get('/dira', function () {
-    return "Hello dira sanjaya wardana";
-});
-
-Route::redirect('/home', '/dira');
-
-// fallback route --> ketika halaman yang diakses tidak ada
-Route::fallback(function () {
-    return "Page Not Found";
-});
-=======
 
 // cara1 menampilkan view --> langsung menggunakan class static view
 // Route::view('uri', 'folder.namaFileViewnya', ['data' => 'value']);
@@ -92,4 +78,3 @@ Route::post("/input/type", [InputController::class, "inputType"]);
 Route::post("/input/filter/only", [InputController::class, "filterOnly"]);
 Route::post("/input/filter/except", [InputController::class, "filterExcept"]);
 Route::post("/input/filter/merge", [InputController::class, "filterMerge"]);
->>>>>>> test
