@@ -88,3 +88,4 @@ Route::post('/file/upload', [FileController::class, "upload"]);
 
 // Reponse
 Route::get('/response/hello', [ResponseController::class, "response"]);
+Route::get("/response/header", [ResponseController::class, "header"]);
