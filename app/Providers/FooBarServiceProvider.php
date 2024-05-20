@@ -20,7 +20,8 @@ class FooBarServiceProvider extends ServiceProvider implements DeferrableProvide
     // function register akan dieksekusi terlebih dahulu sebelum boot
     public function register()
     {
-        echo"FooBarServiceProvider";
+        // echo"FooBarServiceProvider";
+
         $this->app->singleton(Foo::class, function () {
             return new Foo();
         });
