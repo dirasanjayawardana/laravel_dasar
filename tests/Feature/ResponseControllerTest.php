@@ -19,10 +19,31 @@ class ResponseControllerTest extends TestCase
     public function testHeader()
     {
         $this->get("/response/header")
-        ->assertStatus(200)
-        ->assertSeeText("Dira")->assertSeeText("Sanjaya")
-        ->assertHeader("Content-Type", "application/json")
-        ->assertHeader("Author", "Dira Sanjaya Wardana")
-        ->assertHeader("App", "Laravel Dasar");
+            ->assertStatus(200)
+            ->assertSeeText("Dira")->assertSeeText("Sanjaya")
+            ->assertHeader("Content-Type", "application/json")
+            ->assertHeader("Author", "Dira Sanjaya Wardana")
+            ->assertHeader("App", "Laravel Dasar");
+    }
+
+
+    public function testView()
+    {
+        $this->get("/response/view")
+            ->assertSeeText("Hello Dira");
+    }
+
+
+    public function testJson()
+    {
+        $this->get("/response/json")
+            ->assertJson(["firstName" => "Dira", "lastName" => "Sanjaya"]);
+    }
+
+
+    public function testDownload()
+    {
+        $this->get("/response/download")
+            ->assertDownload("gambar.png");
     }
 }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CookieController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\InputController;
@@ -89,3 +90,11 @@ Route::post('/file/upload', [FileController::class, "upload"]);
 // Reponse
 Route::get('/response/hello', [ResponseController::class, "response"]);
 Route::get("/response/header", [ResponseController::class, "header"]);
+Route::get("/response/view", [ResponseController::class, "responseView"]);
+Route::get("/response/json", [ResponseController::class, "responseJson"]);
+Route::get("/response/file", [ResponseController::class, "responseFile"]);
+Route::get("/response/download", [ResponseController::class, "responseDownload"]);
+
+
+// Cookie
+Route::get("/cookie/set", [CookieController::class, "createCookie"]);

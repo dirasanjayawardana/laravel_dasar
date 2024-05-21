@@ -56,7 +56,7 @@ class ResponseController extends Controller
     public function responseFile(Request $request): BinaryFileResponse
     {
         return response()
-            ->file(storage_path("app/public/pictures/dira.png"));
+            ->file(storage_path("app/public/pictures/test.png"));
     }
 
 
@@ -64,6 +64,6 @@ class ResponseController extends Controller
     public function responseDownload(Request $request): BinaryFileResponse
     {
         return response()
-            ->download(storage_path("app/public/pictures/dira.png"), "gambar.png");
+            ->download(storage_path("app/public/pictures/test.png"), "gambar.png");
     }
 }
