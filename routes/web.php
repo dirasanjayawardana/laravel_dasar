@@ -4,6 +4,7 @@ use App\Http\Controllers\CookieController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\InputController;
+use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ResponseController;
 use Illuminate\Support\Facades\Route;
 
@@ -46,20 +47,20 @@ Route::get("category/{id}/item/{item}", function (string $categoryId, string $ca
 
 
 // Optional Route Paramter --> route parameter tidak wajib diisi, dengan menambahkan tanda ?, namun di closure harus diberi nilai defaultnya
-Route::get("/users/{id?}", function(string $userId = '404') {
+Route::get("/users/{id?}", function (string $userId = '404') {
     return "Users : " . $userId;
 })->name("user.detail");
 
 
 // Named Route --> dengan menggunakan ->name(), memberikan nama pada sebuah route, untuk mendapatkan informasi seperti url, atau untuk redirect
-Route::get('/pengguna/{id}', function($id) {
+Route::get('/pengguna/{id}', function ($id) {
     // mengambil url dari user detail
     $link = route('user.detail', [
         'id' => $id
     ]);
     return "Link : " . $link;
 });
-Route::get('/pengguna-redirect/{id}', function($id) {
+Route::get('/pengguna-redirect/{id}', function ($id) {
     return redirect()->route('user.detail', [
         'id' => $id
     ]);
@@ -98,3 +99,15 @@ Route::get("/response/download", [ResponseController::class, "responseDownload"]
 
 // Cookie
 Route::get("/cookie/set", [CookieController::class, "createCookie"]);
+Route::get("/cookie/get", [CookieController::class, "getCookie"]);
+Route::get("/cookie/clear", [CookieController::class, "clearCookie"]);
+
+
+// Redirect
+Route::get("/redirect/from", [RedirectController::class, "redirectFrom"]);
+Route::get("/redirect/to", [RedirectController::class, "redirectTo"]);
+Route::get("/redirect/name", [RedirectController::class, "redirectName"]);
+Route::get("/redirect/hello/{name}", [RedirectController::class, "redirectHello"])
+    ->name("redirect-hello");
+Route::get("/redirect/action", [RedirectController::class, "redirectAction"]);
+Route::get("/redirect/dirapp", [RedirectController::class, "redirectAway"]);
