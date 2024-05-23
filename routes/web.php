@@ -6,6 +6,8 @@ use App\Http\Controllers\HelloController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Middleware\ContohMiddleware;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 // Logic untuk Route sebaiknya disimpan dalam controller
@@ -111,3 +113,13 @@ Route::get("/redirect/hello/{name}", [RedirectController::class, "redirectHello"
     ->name("redirect-hello");
 Route::get("/redirect/action", [RedirectController::class, "redirectAction"]);
 Route::get("/redirect/dirapp", [RedirectController::class, "redirectAway"]);
+
+
+// Middleware: ->middleware(['namaMiddleware:parameter1,parameter2']);
+Route::get("/middleware/api", function () {
+    return "OK";
+})->middleware(['contoh:DIRAPP, 401']);
+
+// withouMiddleware --> untuk exclude middleware tertentu
+Route::post('/file/upload/without-middleware', [FileController::class, "upload"])
+    ->withoutMiddleware([VerifyCsrfToken::class]);

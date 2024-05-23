@@ -29,10 +29,12 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureRateLimiting();
 
         $this->routes(function () {
+            // semua route dengan prefix api atau berada di group router/api.php akan menggunakan middleware 'api' yang ada di field $middlewareGroups di app/http/kernel.php
             Route::middleware('api')
                 ->prefix('api')
                 ->group(base_path('routes/api.php'));
 
+            // semua route yang berada di group routes/web.php akan menggunakan middleware 'web' yang ada di field $middlewareGroups di app/http/kernel.php
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
         });
