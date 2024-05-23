@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CookieController;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FormController;
 use App\Http\Controllers\HelloController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\RedirectController;
@@ -99,20 +100,27 @@ Route::get("/response/file", [ResponseController::class, "responseFile"]);
 Route::get("/response/download", [ResponseController::class, "responseDownload"]);
 
 
-// Cookie
-Route::get("/cookie/set", [CookieController::class, "createCookie"]);
-Route::get("/cookie/get", [CookieController::class, "getCookie"]);
-Route::get("/cookie/clear", [CookieController::class, "clearCookie"]);
+// ROUTE GROUP # ROUTE CONTROLLER --> Route::controller(controllernya)->group(closure)
+Route::controller(CookieController::class)->group(function () {
+    // Cookie
+    // karena menggunakan route controller, tidak perlu menyebutkan class controllernya lagi
+    Route::get("/cookie/set", "createCookie");
+    Route::get("/cookie/get", "getCookie");
+    Route::get("/cookie/clear", "clearCookie");
+});
 
 
-// Redirect
-Route::get("/redirect/from", [RedirectController::class, "redirectFrom"]);
-Route::get("/redirect/to", [RedirectController::class, "redirectTo"]);
-Route::get("/redirect/name", [RedirectController::class, "redirectName"]);
-Route::get("/redirect/hello/{name}", [RedirectController::class, "redirectHello"])
-    ->name("redirect-hello");
-Route::get("/redirect/action", [RedirectController::class, "redirectAction"]);
-Route::get("/redirect/dirapp", [RedirectController::class, "redirectAway"]);
+// ROUTE GROUP # ROUTE PREFIX --> Route::prefix('/prefixnya')->group(closure)
+Route::prefix('/redirect')->group(function () {
+    // Redirect
+    Route::get("/from", [RedirectController::class, "redirectFrom"]);
+    Route::get("/to", [RedirectController::class, "redirectTo"]);
+    Route::get("/name", [RedirectController::class, "redirectName"]);
+    Route::get("/hello/{name}", [RedirectController::class, "redirectHello"])
+        ->name("redirect-hello");
+    Route::get("/action", [RedirectController::class, "redirectAction"]);
+    Route::get("/dirapp", [RedirectController::class, "redirectAway"]);
+});
 
 
 // Middleware: ->middleware(['namaMiddleware:parameter1,parameter2']);
@@ -120,6 +128,30 @@ Route::get("/middleware/api", function () {
     return "OK";
 })->middleware(['contoh:DIRAPP, 401']);
 
+
 // withouMiddleware --> untuk exclude middleware tertentu
 Route::post('/file/upload/without-middleware', [FileController::class, "upload"])
     ->withoutMiddleware([VerifyCsrfToken::class]);
+
+
+// ROUTE GROUP # ROUTE MIDDLEWARE --> Route::middleware(['namaMiddleware:parameter'])->group(closure)
+Route::middleware(['contoh:DIRAPP,401'])->group(function () {
+    Route::get("/middleware/group", function () {
+        return "OK";
+    });
+});
+
+
+// FORM -- CSRF Token
+Route::get('/form', [FormController::class, "form"]);
+Route::post('/form', [FormController::class, "submitForm"]);
+
+
+// ROUTE GROUP # MULTIPLE GROUP --> menggunakan beberapa jenis route group sekaligus
+Route::middleware(['contoh:DIRAPP,401'])->prefix('/multi-group')->group(function() {
+    Route::get("/api", function () {
+        return "OK";
+    });
+});
+
+
