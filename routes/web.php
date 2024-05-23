@@ -7,9 +7,11 @@ use App\Http\Controllers\HelloController;
 use App\Http\Controllers\InputController;
 use App\Http\Controllers\RedirectController;
 use App\Http\Controllers\ResponseController;
+use App\Http\Controllers\SessionController;
 use App\Http\Middleware\ContohMiddleware;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
 
 // Logic untuk Route sebaiknya disimpan dalam controller
 // jika ada Route yang konflik ada ada route yang sama, maka tidak akan terjadi error, tetapi laravel akan mengeksekusi route yang paling atas
@@ -153,5 +155,33 @@ Route::middleware(['contoh:DIRAPP,401'])->prefix('/multi-group')->group(function
         return "OK";
     });
 });
+
+
+// URL Generator
+// mengambil url saat ini
+Route::get("/url/current", function() {
+    // bisa menggunakan --> url()->current(); atau menggunakan facadenya
+    return URL::full();
+});
+
+// membuat link menuju named route, akan mengembalikan url dari route dengan nama tertentu
+Route::get("/url/named", function () {
+    // bisa menggunakan = route(name, parameters); atau url()->route(name, parameters); atau URL::route(name, parameters);
+    return URL::route("redirect-hello", ['name' => "dira"]);
+});
+
+// membuat link menuju controller action
+// bisa menggunakan = action([classController, nameAction], [parameters]);
+// atau URL::action([classController, nameAction], [parameters]);
+// atau url()->action([classController, nameAction], [parameters])
+Route::get("/url/action", function() {
+    return URL::action([FormController::class, "form"], []);
+});
+
+
+// Session
+Route::get("/session/create", [SessionController::class, "createSession"]);
+Route::get("/session/get", [SessionController::class, "getSession"]);
+
 
 
