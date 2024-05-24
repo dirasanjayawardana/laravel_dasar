@@ -1,5 +1,6 @@
 <?php
 
+use App\Exceptions\ValidationException;
 use App\Http\Controllers\CookieController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\FormController;
@@ -182,6 +183,50 @@ Route::get("/url/action", function() {
 // Session
 Route::get("/session/create", [SessionController::class, "createSession"]);
 Route::get("/session/get", [SessionController::class, "getSession"]);
+
+
+// Exception - Error
+Route::get("/error/sample", function () {
+    // dengan throw exception, error akan ditampilkan dihalaman web dan mentriger method reportable() di app/Exceptions/Handler.php
+    throw new Exception("Sample Error");
+});
+Route::get("/error/manual", function () {
+    // dengan method report(), ketika terjadi error tidak ditampilkan dihalaman web, hanya mentriger method reportable() di app/Exceptions/Handler.php
+    report(new Exception("Sample Error"));
+    return "OK";
+});
+Route::get("/error/validation", function()
+{
+    // ketika terjadi ValidationException tidak akan mentriger method reportable() di app/Exceptions/Handler.php, karena sudah didaftarkan di field $dontReport pada App/Exceptions/Handler.php
+    // ketika terjadi ValidationException akan mengeksekusi custom view karena telah di custom pada method register->renderable() di App/Exceptions/Handler.php
+    throw new ValidationException("Validation Error");
+});
+
+
+// HTTP Exception --> exception dengan http status, menggunakan method: abort(statusCode, message, [headers]); atau
+// throw new HttpException(statusCode, message, [headers]); dari package Symfony/Component/HttpKernel/HttpExceptio
+Route::get("/abort/400", function ()
+{
+    // akan otomatis render custom view error 400.blade.php, jika custom view tidak dibuat maka akan merender view error bawaan laravel
+    abort(400, "Ups something error");
+});
+Route::get("/abort/401", function ()
+{
+    abort(401);
+});
+Route::get("/abort/501", function ()
+{
+    abort(503, "Something wrong");
+});
+
+
+// Maintenance mode --> php artisan down --> php artisan serve
+// ketika berada di maintenance mode, secara otomatis semua request akan mengembalikan HttpException 503 (service unavailable)
+// secara otomatis akan ada file di storage/framework/down
+// untuk keluar dari maintenance mode --> php artisan up --> atau bisa langusng hapus saja file di storage/framwork/down
+// untuk mengakses aplikasi saat berada di maintenance mode --> php artisan down --secret="yourSecretKey" --> kemudian web bisa diakses dengan http://contoh.com/yourSecretKey
+
+
 
 
 

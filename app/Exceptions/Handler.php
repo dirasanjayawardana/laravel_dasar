@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -16,14 +17,19 @@ class Handler extends ExceptionHandler
         //
     ];
 
+
+
     /**
      * A list of the exception types that are not reported.
      *
      * @var array<int, class-string<\Throwable>>
      */
     protected $dontReport = [
-        //
+        // Mendaftarkan jenis exception yang tidak ingin direport
+        ValidationException::class
     ];
+
+
 
     /**
      * A list of the inputs that are never flashed for validation exceptions.
@@ -36,6 +42,8 @@ class Handler extends ExceptionHandler
         'password_confirmation',
     ];
 
+
+
     /**
      * Register the exception handling callbacks for the application.
      *
@@ -43,8 +51,17 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
+        // ketika terjadi exception, code dalam reportable akan dieksekusi, contoh ingin mengirim notif ketika terjadi error
         $this->reportable(function (Throwable $e) {
-            //
+            print ($e); // contoh ketika terjadi error akan melakukan print erronya
+
+            return false; // return false jika hanya ingin mengeksekusi satu reportable, reportable dibawahnya tidak akan dieksekusi
+        });
+
+        // membuat custom view saat terjadi Exception, contohnya ValidationException
+        $this->renderable(function (ValidationException $exception, Request $request)
+        {
+            return response("Bad Request", 400);
         });
     }
 }
